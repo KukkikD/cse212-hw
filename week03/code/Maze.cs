@@ -32,7 +32,16 @@ public class Maze
     /// </summary>
     public void MoveLeft()
     {
-        // FILL IN CODE
+        // directions: [left, right, up, down]
+        bool canMove = _mazeMap[(_currX, _currY)][0];
+
+        if (!canMove) // if can't move, throw exception
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // if can move, then reduce x (move back to left)
+        _currX -= 1;
     }
 
     /// <summary>
@@ -41,7 +50,16 @@ public class Maze
     /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+        // check current position, can move to right?
+        bool canMove = _mazeMap[(_currX, _currY)][1];
+
+        if (!canMove) // if can't move, throw exception
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // if can move, then increase x (move forward to right)
+        _currX += 1;
     }
 
     /// <summary>
@@ -50,7 +68,16 @@ public class Maze
     /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        // check current position, can move up?
+        bool canMove = _mazeMap[(_currX, _currY)][2];
+
+        if (!canMove) // if can't move, throw exception
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // IMPORTANT: Up means y decreases in this coordinate system
+        _currY -= 1;
     }
 
     /// <summary>
@@ -59,7 +86,16 @@ public class Maze
     /// </summary>
     public void MoveDown()
     {
-        // FILL IN CODE
+        // check current position, can move down?
+        bool canMove = _mazeMap[(_currX, _currY)][3];
+
+        if (!canMove) // if can't move, throw exception
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        // IMPORTANT: Down means y increases
+        _currY += 1;
     }
 
     public string GetStatus()

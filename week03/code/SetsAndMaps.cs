@@ -22,8 +22,41 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // Store each 2-letter word as a tuple of 2 chars to avoid string allocations
+        var seen = new HashSet<(char, char)>();
+        var results = new List<string>();
+
+        foreach (var w in words)
+        {
+            // Defensive: skip invalid input (even though tests usually give valid words)
+        if (string.IsNullOrEmpty(w) || w.Length != 2)
+            continue;
+
+        char a = w[0];
+        char b = w[1];
+
+        // Special case: "aa" should not match anything
+        if (a == b)
+            continue;
+
+        var pair = (a, b);
+        var reverse = (b, a);
+
+        // If we've already seen the reverse, we found a symmetric pair
+        if (seen.Contains(reverse))
+        {
+            // Only build output strings when we actually have a pair
+            results.Add($"{w} & {new string(new[] { b, a })}");
+        }
+        else
+        {
+            // Remember this pair for future matches
+            seen.Add(pair);
+        }
     }
+        return results.ToArray();
+    }
+
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -43,7 +76,16 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            // degree at column 4 -> index 3
+            var degree = fields[3].Trim();
+
+            // counting
+            if (degrees.ContainsKey(degree)) //if have seen that degree +1
+                degrees[degree] += 1;
+            else
+                degrees[degree] = 1;
         }
+        
 
         return degrees;
     }
@@ -67,7 +109,38 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // 1. ignore spaces and case
+        word1 = word1.ToLower().Replace(" ", "");
+        word2 = word2.ToLower().Replace(" ", "");
+
+        // 2. length must match
+        if (word1.Length != word2.Length)
+            return false;
+
+        // 3. count letters in word1
+        var counts = new Dictionary<char, int>();
+
+        foreach (var c in word1)
+        {
+            if (counts.ContainsKey(c))
+                counts[c] += 1;
+            else
+                counts[c] = 1;
+        }
+
+        // 4. subtract counts using word2
+        foreach (var c in word2)
+        {
+            if (!counts.ContainsKey(c))
+                return false;
+
+            counts[c] -= 1;
+
+            if (counts[c] < 0)
+                return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -101,6 +174,31 @@ public static class SetsAndMaps
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+        // If deserialization failed or there are no features, return empty array
+        if (featureCollection?.Features == null)
+            return Array.Empty<string>();
+
+        // Create a list to store formatted earthquake descriptions
+        var results = new List<string>();
+
+        // Loop through each earthquake feature
+        foreach (var feature in featureCollection.Features)
+        {
+            // Get the location description (place)
+            var place = feature.Properties.Place;
+
+            // Get the magnitude (can be null)
+            var mag = feature.Properties.Mag;
+
+            // Convert magnitude to text (use 0 if magnitude is missing)
+            var magText = mag.HasValue ? mag.Value.ToString() : "0";
+
+            // Create formatted string: "<place> - Mag <magnitude>"
+            results.Add($"{place} - Mag {magText}");
+        }
+
+        // Convert list to array and return
+        return results.ToArray();
+    
     }
 }

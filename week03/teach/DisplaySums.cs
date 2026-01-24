@@ -28,6 +28,20 @@
     /// </summary>
     /// <param name="numbers">array of integers</param>
     private static void DisplaySumPairs(int[] numbers) {
-        // TODO Problem 2 - This should print pairs of numbers in the given array
+        var seen = new HashSet<int>();
+
+        foreach (var x in numbers)
+        {
+            var need = 10 - x;
+
+            if (seen.Contains(need))// TODO Problem 2 - This should print pairs of numbers in the given array
+            {
+                Console.WriteLine($"{x} {need}");
+            }
+
+            // Add after check just in case x=5 then need 5 (5+5=10)
+            // Will work exactly when have 5 (but the question is no duplicates number)
+            seen.Add(x);
+        }
     }
 }
