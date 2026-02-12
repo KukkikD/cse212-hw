@@ -80,7 +80,12 @@ public class BinarySearchTree : IEnumerable<int>
 
     private void TraverseBackward(Node? node, List<int> values)
     {
-        // TODO Problem 3
+        // TODO Start Problem 3
+        if (node is null) return; //Base case
+
+        TraverseBackward(node.Right, values); //1. Go to the Right first
+        values.Add(node.Data); //2. Use current data
+        TraverseBackward(node.Left, values); // 3. Go to the Left later
     }
 
     /// <summary>

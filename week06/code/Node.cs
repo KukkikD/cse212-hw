@@ -11,8 +11,9 @@ public class Node
 
     public void Insert(int value)
     {
-        // TODO Start Problem 1
-
+        // Problem 1: ignore duplicates
+        if (value == Data) return;
+        
         if (value < Data)
         {
             // Insert to the left
@@ -34,12 +35,33 @@ public class Node
     public bool Contains(int value)
     {
         // TODO Start Problem 2
-        return false;
+        if (value == Data) //if value equa current data
+            return true; // can go to the tree
+
+        // if value less than current data 
+        if (value < Data)
+        {
+            if (Left is null) //go to the left
+            return false; // can't go no value in tree
+            
+           else return Left.Contains(value); //recursive
+                  
+        }
+        else // if value more than current data
+        {
+            if (Right is null)//  go to the right
+            return false; // can't go no value in tree
+
+            else return Right.Contains(value); //recursive
+        }      
     }
 
     public int GetHeight()
     {
         // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        int leftHeight = (Left is null) ? 0 : Left.GetHeight();
+        int rightHeight = (Right is null) ? 0 : Right.GetHeight();
+
+        return 1 + Math.Max(leftHeight, rightHeight);
     }
 }
